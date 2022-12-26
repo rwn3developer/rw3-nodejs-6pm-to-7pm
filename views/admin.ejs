@@ -1,0 +1,57 @@
+<form method="post" action="/insertdata">
+    <table border="1">
+        <tr>
+            <td>Name :- </td>
+            <td><input type="text" name="name"></td>
+        </tr>
+        <tr>
+            <td>Email :- </td>
+            <td><input type="text" name="email"></td>
+        </tr>
+        <tr>
+            <td>Password :- </td>
+            <td><input type="text" name="password"></td>
+        </tr>
+        <tr>
+            <td>Gender :- </td>
+            <td>
+                <input  type="radio" value="male" name="gender">Male
+                <input  type="radio" value="female" name="gender">Female
+            </td>
+        </tr>
+        <tr>
+            <td>Hobby :- </td>
+            <td>
+                <input  type="checkbox" value="cricket" name="hobby">Cricket
+                <input  type="checkbox" value="music" name="hobby">Music
+                <input  type="checkbox" value="reading" name="hobby">Reading
+            </td>
+        </tr>
+
+        <tr>
+            <td>city :- </td>
+            <td>
+                <select name="city">
+                    <option value="">----select city-----</option>
+
+                    <%
+                        let city = ["surat","vadodara","ahemdabad","rajkot"]; 
+                        for(let i in city) {
+                    %>
+                            <option value="<%= city[i] %>"><%= city[i] %></option>
+
+                    <% } %>
+
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><input type="submit"/></td>
+        </tr>
+
+
+    </table>
+    <a href="/view">View Record</a>
+</form>

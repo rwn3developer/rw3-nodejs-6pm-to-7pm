@@ -1,0 +1,26 @@
+<table border="1">
+    <tr>
+        <td>Name</td>
+        <td>Email</td>
+        <td>Password</td>
+        <td>Gender</td>
+        <td>Hobby</td>
+        <td>City</td>
+        <td>Action</td>
+
+    </tr>
+    <% for(let i in allrecord) { %>
+        <tr>
+            <td><%= allrecord[i].name %></td>
+            <td><%= allrecord[i].email %></td>
+            <td><%= allrecord[i].password %></td>
+            <td><%= allrecord[i].gender %></td>
+            <td><%= allrecord[i].hobby %></td>
+            <td><%= allrecord[i].city %></td>
+            <td><a href="/deletedata/<%= allrecord[i].id %>">Delete</a></td>
+        </tr>
+    <% } %>
+
+    <a href="/">Add</a>
+
+</table>
