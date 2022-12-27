@@ -1,0 +1,58 @@
+<form method="post" action="/updateData">
+    <input type="hidden" name="id" value="<%= editR.id %>"/>
+    <table border="1">
+        <tr>
+            <td>Name :- </td>
+            <td><input type="text" value="<%= editR.name %>" name="name"></td>
+        </tr>
+        <tr>
+            <td>Email :- </td>
+            <td><input type="text" value="<%= editR.email %>" name="email"></td>
+        </tr>
+        <tr>
+            <td>Password :- </td>
+            <td><input type="text" value="<%= editR.password %>" name="password"></td>
+        </tr>
+        <tr>
+            <td>Gender :- </td>
+            <td>
+                <input  type="radio" <% if(editR.gender == "male") {  %> checked  <%  } %> value="male" name="gender">Male
+                <input  type="radio" <% if(editR.gender == "female") {  %> checked  <%  } %> value="female" name="gender">Female
+            </td>
+        </tr>
+        <tr>
+            <td>Hobby :- </td>
+            <td>
+                <input  type="checkbox" <% if(editR.hobby.includes('cricket')) {  %> checked  <%  } %> value="cricket" name="hobby">Cricket
+                <input  type="checkbox" <% if(editR.hobby.includes('music')) {  %> checked  <%  } %> value="music" name="hobby">Music
+                <input  type="checkbox" <% if(editR.hobby.includes('reading')) {  %> checked  <%  } %> value="reading" name="hobby">Reading
+            </td>
+        </tr>
+
+        <tr>
+            <td>city :- </td>
+            <td>
+                <select name="city">
+                    <option value="">----select city-----</option>
+
+                    <%
+                        let city = ["surat","vadodara","ahemdabad","rajkot"]; 
+                        for(let i in city) {
+                    %>
+                            <option <% if(city[i] == editR.city) { %> selected <% } %> value="<%= city[i] %>"><%= city[i] %></option>
+
+                    <% } %>
+
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td></td>
+            <td><input type="submit"/></td>
+        </tr>
+
+
+    </table>
+    <a href="/view">View Record</a>
+</form>

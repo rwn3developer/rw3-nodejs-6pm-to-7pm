@@ -17,7 +17,10 @@
             <td><%= allrecord[i].gender %></td>
             <td><%= allrecord[i].hobby %></td>
             <td><%= allrecord[i].city %></td>
-            <td><a href="/deletedata/<%= allrecord[i].id %>">Delete</a></td>
+            <td>
+                <a href="/deletedata/<%= allrecord[i].id %>">Delete</a> ||
+                <a href="/editdata/<%= allrecord[i].id %>">Edit</a> ||
+            </td>
         </tr>
     <% } %>
 

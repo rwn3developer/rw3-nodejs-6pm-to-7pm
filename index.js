@@ -61,7 +61,6 @@ app.get('/view',(req,res)=>{
 
 app.get('/deletedata/:id',(req,res)=>{
     let deleteid = req.params.id;
-
     Admintbl.findByIdAndDelete(deleteid,(err,data)=>{
         if(err){
             console.log("Record not delete");
@@ -71,6 +70,39 @@ app.get('/deletedata/:id',(req,res)=>{
         return res.redirect('back');
     });
 
+})
+
+app.get('/editdata/:id',(req,res)=>{
+    let editid = req.params.id;
+    
+    Admintbl.findById(editid,(err,editrecord)=>{
+        if(err){
+            console.log("Record not fetch");
+            return false;
+        }
+        return res.render('edit',{
+            editR : editrecord
+        })
+    })
+});
+
+app.post('/updateData',(req,res)=>{
+    let id = req.body.id;
+    Admintbl.findByIdAndUpdate(id,{
+        name : req.body.name,
+        email : req.body.email,
+        password : req.body.password,
+        gender : req.body.gender,
+        hobby : req.body.hobby,
+        city : req.body.city
+    },(err,data)=>{
+        if(err){
+            console.log("Record not update");
+            return false;
+        }
+        console.log("Record successfully update");
+        return res.redirect('/view');
+    })
 })
 
 app.listen(port,(err)=>{
