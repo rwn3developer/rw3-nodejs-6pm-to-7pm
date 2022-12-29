@@ -14,6 +14,10 @@ const db = require('./config/mongoose');
 
 const Admintbl = require('./models/AdminModel');
 
+const multer = require('multer');
+
+app.use('/uploads',express.static(path.join(__dirname,'/uploads')));
+
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,"views"));
 
@@ -23,7 +27,27 @@ app.get('/',(req,res)=>{
     return res.render('admin');
 });
 
-app.post('/insertdata',(req,res)=>{
+const uploads = path.join("uploads/");
+
+const storage = multer.diskStorage({
+    destination : (req,res,cb) => {
+        cb(null,uploads);
+    },
+    filename : (req,file,cb) => {
+        cb(null,file.fieldname+"-"+Date.now());
+    }
+});
+
+const uploadfile = multer({ storage: storage }).single('avatar');
+
+app.post('/insertdata',uploadfile,(req,res)=>{
+    let avatar = "";
+    
+    if(req.file)
+    {
+        avatar = uploads+"/"+req.file.filename;
+    }
+
     let name = req.body.name;
     let email = req.body.email;
     let password = req.body.password;
@@ -36,7 +60,8 @@ app.post('/insertdata',(req,res)=>{
         password : password,
         gender : gender,
         hobby : hobby,
-        city : city
+        city : city,
+        avatar : avatar
     },(err,data)=>{
         if(err){
             console.log("Record not insert");

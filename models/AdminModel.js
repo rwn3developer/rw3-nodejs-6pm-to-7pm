@@ -24,6 +24,10 @@ const AdminSchema = mongoose.Schema({
     city : {
         type : String,
         required : true
+    },
+    avatar : {
+        type : String,
+        required : true
     }
 });
 

@@ -6,6 +6,7 @@
         <td>Gender</td>
         <td>Hobby</td>
         <td>City</td>
+        <td>Image</td>
         <td>Action</td>
 
     </tr>
@@ -17,6 +18,9 @@
             <td><%= allrecord[i].gender %></td>
             <td><%= allrecord[i].hobby %></td>
             <td><%= allrecord[i].city %></td>
+            <td>
+                <img src="<%= allrecord[i].avatar %>" width="100"/>
+            </td>
             <td>
                 <a href="/deletedata/<%= allrecord[i].id %>">Delete</a> ||
                 <a href="/editdata/<%= allrecord[i].id %>">Edit</a> ||
