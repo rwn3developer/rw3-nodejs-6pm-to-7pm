@@ -6,6 +6,8 @@ const app = express();
 
 const path = require('path');
 
+const fs = require('fs');
+
 const mongoose = require('mongoose');
 
 mongoose.set("strictQuery", false);
@@ -16,7 +18,7 @@ const Admintbl = require('./models/AdminModel');
 
 const multer = require('multer');
 
-app.use('/uploads',express.static(path.join(__dirname,'/uploads')));
+app.use('/uploads',express.static(path.join(__dirname,'uploads')));
 
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,"views"));
@@ -27,7 +29,7 @@ app.get('/',(req,res)=>{
     return res.render('admin');
 });
 
-const uploads = path.join("uploads/");
+const uploads = path.join("uploads");
 
 const storage = multer.diskStorage({
     destination : (req,res,cb) => {
@@ -86,6 +88,15 @@ app.get('/view',(req,res)=>{
 
 app.get('/deletedata/:id',(req,res)=>{
     let deleteid = req.params.id;
+    Admintbl.findById(deleteid,(err,singlerecord)=>{
+        if(err){
+            console.log("Record not fetch");
+            return false;
+        }
+        if(singlerecord.avatar){
+            fs.unlinkSync(path.join(__dirname,singlerecord.avatar));
+        }
+    }) 
     Admintbl.findByIdAndDelete(deleteid,(err,data)=>{
         if(err){
             console.log("Record not delete");
@@ -99,7 +110,6 @@ app.get('/deletedata/:id',(req,res)=>{
 
 app.get('/editdata/:id',(req,res)=>{
     let editid = req.params.id;
-    
     Admintbl.findById(editid,(err,editrecord)=>{
         if(err){
             console.log("Record not fetch");
@@ -111,23 +121,65 @@ app.get('/editdata/:id',(req,res)=>{
     })
 });
 
-app.post('/updateData',(req,res)=>{
+app.post('/updateData',uploadfile,(req,res)=>{
     let id = req.body.id;
-    Admintbl.findByIdAndUpdate(id,{
-        name : req.body.name,
-        email : req.body.email,
-        password : req.body.password,
-        gender : req.body.gender,
-        hobby : req.body.hobby,
-        city : req.body.city
-    },(err,data)=>{
-        if(err){
-            console.log("Record not update");
-            return false;
-        }
-        console.log("Record successfully update");
-        return res.redirect('/view');
-    })
+    if(req.file)
+    {   
+        let avatar = "";
+        //old file unlink thase
+        Admintbl.findById(id,(err,srecord)=>{
+            if(err){
+                console.log("Record not fetch");
+                return false;
+            }
+            if(srecord.avatar)
+            {
+                fs.unlinkSync(srecord.avatar);
+            }
+        })
+        avatar = uploads+"/"+req.file.filename;
+            Admintbl.findByIdAndUpdate(id,{
+            name : req.body.name,
+            email : req.body.email,
+            password : req.body.password,
+            gender : req.body.gender,
+            hobby : req.body.hobby,
+            city : req.body.city,
+            avatar : avatar
+        },(err,data)=>{
+            if(err){
+                console.log("Record not update");
+                return false;
+            }
+            console.log("Record successfully update");
+            return res.redirect('/view');
+        })
+    }
+    else{
+        Admintbl.findById(id,(err,srecord)=>{
+            if(err){
+                console.log("Record not fetch");
+                return false;
+            }
+            let avatar = srecord.avatar;
+            Admintbl.findByIdAndUpdate(id,{
+                name : req.body.name,
+                email : req.body.email,
+                password : req.body.password,
+                gender : req.body.gender,
+                hobby : req.body.hobby,
+                city : req.body.city,
+                avatar : avatar
+            },(err,data)=>{
+                if(err){
+                    console.log("Record not update");
+                    return false;
+                }
+                console.log("Record successfully update");
+                return res.redirect('/view');
+            })
+        })
+    }  
 })
 
 app.listen(port,(err)=>{
@@ -136,4 +188,4 @@ app.listen(port,(err)=>{
         return false;
     }
     console.log("Server is start on port :- "+port);
-})
+});
